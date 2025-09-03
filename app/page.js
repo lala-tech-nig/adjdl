@@ -1,103 +1,169 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
-export default function Home() {
+export default function App() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    course: "",
+  });
+
+  const courses = [
+    { id: "web", name: "Web Development", link: "https://www.youtube.com/watch?v=nu_pCVPKzTk" },
+    { id: "graphics", name: "Graphics Design", link: "https://www.youtube.com/watch?v=QyFcl_Fba-k" },
+    { id: "content", name: "Content Creation", link: "https://www.youtube.com/watch?v=j0Wc0bfkvAY" },
+    { id: "data", name: "Data Analysis", link: "https://www.youtube.com/watch?v=ua-CiDNNj30" },
+  ];
+
+  const handleSubmit = () => {
+    // Instead of sending email via API, just go to review step
+    setStep(3);
+  };
+
+  const selectedCourse = courses.find((c) => c.id === formData.course);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex flex-col h-screen w-screen items-center justify-center bg-gray-100">
+      {/* Step 1 */}
+      {step === 1 && (
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col h-screen w-full items-center justify-between p-10"
+        >
+          <button
+            onClick={() => setStep(2)}
+            className="mt-20 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg"
+          >
+            Get Started
+          </button>
+          <div className="w-full flex justify-center">
+            <select className="p-2 border rounded w-1/2">
+              <option>English</option>
+              <option>French</option>
+              <option>Spanish</option>
+              <option>German</option>
+              <option>Chinese</option>
+              <option>Arabic</option>
+            </select>
+          </div>
+        </motion.div>
+      )}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+      {/* Step 2 */}
+      {step === 2 && (
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col w-full h-screen p-6 space-y-4"
+        >
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="p-3 border rounded"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            className="p-3 border rounded"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="p-3 border rounded"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          />
+
+          <div className="space-y-2">
+            {courses.map((course) => (
+              <label key={course.id} className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="course"
+                  checked={formData.course === course.id}
+                  onChange={() => setFormData({ ...formData, course: course.id })}
+                />
+                <span>{course.name}</span>
+              </label>
+            ))}
+          </div>
+
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={handleSubmit}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg shadow-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Step 3 */}
+      {step === 3 && (
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col w-full h-screen p-6 space-y-4"
+        >
+          <h2 className="text-xl font-bold">Your Submitted Info</h2>
+          <p><strong>Name:</strong> {formData.name}</p>
+          <p><strong>Phone:</strong> {formData.phone}</p>
+          <p><strong>Email:</strong> {formData.email}</p>
+          <p><strong>Course:</strong> {selectedCourse?.name}</p>
+
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={() => setStep(4)}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg"
+            >
+              Continue
+            </button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Step 4 */}
+      {step === 4 && selectedCourse && (
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col w-full h-screen p-6 space-y-4 items-center justify-center"
+        >
+          <h2 className="text-xl font-bold">{selectedCourse.name} Tutorial</h2>
+          <iframe
+            width="560"
+            height="315"
+            src={selectedCourse.link.replace("watch?v=", "embed/")}
+            title="YouTube video"
+            frameBorder="0"
+            allowFullScreen
+          ></iframe>
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href={selectedCourse.link}
             target="_blank"
-            rel="noopener noreferrer"
+            className="text-blue-600 underline"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+            Watch on YouTube
           </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </motion.div>
+      )}
     </div>
   );
 }
