@@ -14,7 +14,7 @@ export default function App() {
   const courses = [
     { id: "web", name: "Web Development", link: "https://www.youtube.com/watch?v=nu_pCVPKzTk" },
     { id: "graphics", name: "Graphics Design", link: "https://www.youtube.com/watch?v=QyFcl_Fba-k" },
-    { id: "content", name: "Content Creation", link: "https://www.youtube.com/watch?v=j0Wc0bfkvAY" },
+    { id: "content", name: "Content Creation", link: "https://www.youtube.com/watch?v=lQEWAE3sU2w" },
     { id: "data", name: "Data Analysis", link: "https://www.youtube.com/watch?v=ua-CiDNNj30" },
   ];
 
